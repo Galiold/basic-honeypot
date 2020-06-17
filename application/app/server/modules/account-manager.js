@@ -3,13 +3,15 @@ const crypto 		= require('crypto');
 const moment 		= require('moment');
 const MongoClient 	= require('mongodb').MongoClient;
 
-let db, accounts;
+let db, accounts, attempts;
+
 MongoClient.connect(process.env.DB_URL, { useNewUrlParser: true, useUnifiedTopology: true }, function(e, client) {
 	if (e){
 		console.log(e);
 	}	else{
 		db = client.db(process.env.DB_NAME);
 		accounts = db.collection('accounts');
+		attempts = db.collection('attempts');
 	// index fields 'user' & 'email' for faster new account validation //
 		accounts.createIndex({user: 1, email: 1});
 		console.log('mongo :: connected to database :: "'+process.env.DB_NAME+'"');
@@ -210,3 +212,9 @@ var listIndexes = function()
 	});
 }
 
+
+let save_attempt = (attemptData) => {
+	attempts.insertOne(attemptData, () => {});
+} 
+
+exports.saveAttempt = save_attempt

@@ -3,6 +3,11 @@ var CT = require('./modules/country-list');
 var AM = require('./modules/account-manager');
 var EM = require('./modules/email-dispatcher');
 
+
+const moment = require('moment');
+const geoip = require('geoip-lite');
+
+
 module.exports = function(app) {
 
 /*
@@ -28,7 +33,27 @@ module.exports = function(app) {
 		}
 	});
 	
-	app.post('/', function(req, res){
+	app.post('/', (req, res) => {
+		let ip = req.ip.split(':')
+		
+		ip = ip[ip.length - 1]
+
+		let attemptData = {
+			headers: req.headers,
+			username: req.body['user'],
+			pass: req.body['pass'],
+			datetimegmt: new Date(),
+			rawIP: req.ip,
+			agent: req.headers['user-agent']
+		}
+
+		if (ip.length > 3) {
+			let geoInfo = geoip.lookup(ip)
+			attemptData.location = `${geoInfo.country} - ${geoInfo.city}`
+		}
+
+		AM.saveAttempt(attemptData)
+
 		AM.manualLogin(req.body['user'], req.body['pass'], function(e, o){
 			if (!o){
 				res.status(400).send(e);
