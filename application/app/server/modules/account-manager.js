@@ -1,7 +1,10 @@
 
 const crypto 		= require('crypto');
 const moment 		= require('moment');
+const geoip 		= require('geoip-lite');
 const MongoClient 	= require('mongodb').MongoClient;
+
+
 
 let db, accounts, attempts;
 
@@ -213,7 +216,24 @@ var listIndexes = function()
 }
 
 
-let save_attempt = (attemptData) => {
+let save_attempt = (req, attempt_result) => {
+	let ip = req.ip.split(':')
+		
+	ip = ip[ip.length - 1]
+
+	let geoInfo = geoip.lookup(ip)
+
+	let attemptData = {
+		headers: req.headers,
+		username: req.body['user'],
+		pass: req.body['pass'],
+		datetimegmt: new Date(),
+		rawIP: req.ip,
+		location: geoInfo === null ? 'Not accessible' : `${geoInfo.country} - ${geoInfo.city}`,
+		'user-agent': req.headers['user-agent'],
+		'attempt-result': attempt_result? 'successful' : 'failed'
+	}
+
 	attempts.insertOne(attemptData, () => {});
 } 
 
