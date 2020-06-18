@@ -1,18 +1,18 @@
 version: '2'
 
 services:
-    # mongodb:
-    #     container_name: mongodb
-    #     network_mode: host
-    #     image: mongo
-    #     volumes:
-    #         - ./mongodata:/data/db
+    mongodb:
+        container_name: mongodb
+        network_mode: host
+        image: mongo
+        volumes:
+            - ./mongodata:/data/db
 
-    # node-alpine:
-    #     container_name: node-alpine
-    #     network_mode: host
-    #     image: node-login-app
-    #     build: .
+    node-alpine:
+        container_name: node-alpine
+        network_mode: host
+        image: node-login-app
+        build: .
 
     snort-fedora:
             container_name: snort-fedora
