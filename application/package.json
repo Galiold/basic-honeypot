@@ -11,6 +11,7 @@
     "type": "git",
     "url": "git@github.com:braitsch/node-login.git"
   },
+  "license": "MIT",
   "dependencies": {
     "body-parser": "^1.18.3",
     "connect-mongo": "^3.2.0",

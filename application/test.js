@@ -1,7 +1,7 @@
 const geoip = require('geoip-lite')
 
-let ip = '::1'
-// let ip = '172.0.0.1'
+// let ip = '::1'
+let ip = '178.32.236.93'
 ip = ip.split(':')
 ip = ip[ip.length - 1]
 
