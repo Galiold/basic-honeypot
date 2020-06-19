@@ -5,5 +5,5 @@ RUN yum install -y libdnet libdnet-devel
 RUN ln -s /usr/lib64/libdnet.so.1.0.1 /usr/lib64/libdnet.1
 COPY snort/ /etc/snort/
 # Define the network interface based on the connection
-ENV NETWORK_INTERFACE wlp2s0
+ENV NETWORK_INTERFACE eth0
 CMD [ "snort", "-i", "echo ${NETWORK_INTERFACE}", "-c", "/etc/snort/snort.conf", "-A", "console" ]
