@@ -16,7 +16,9 @@
 # to the VRT Certified Rules License Agreement (v2.0).
 #
 #-------------
-# LOCAL RULES
+# ALERT RULES
 #-------------
 
-alert icmp any any -> any any (msg:"Pinging...";sid:1000004;)
+alert icmp any any -> any any (msg:"Pinging..."; sid:1000001;)
+alert tcp any any <> any 22 (msg:"ssh"; sid:1000002;)
+alert tcp any any -> any 8000 (msg:"tcp"; sid:1000003;)

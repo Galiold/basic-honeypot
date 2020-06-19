@@ -12,7 +12,9 @@ services:
         container_name: node-alpine
         network_mode: host
         image: node-login-app
-        build: .
+        build:
+            context: .
+            dockerfile: Dockerfile.node
 
     snort-fedora:
             container_name: snort-fedora
