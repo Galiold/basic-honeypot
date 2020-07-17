@@ -19,7 +19,7 @@
 # ALERT RULES
 #-------------
 
-#alert icmp any any -> any any (msg:"Pinging..."; sid:1000001;)
-#alert tcp any any <> any 22 (msg:"ssh"; sid:1000002;)
-alert tcp any any -> any 8000 (msg:"tcp"; sid:1000003;)
-alert tcp EXTERNAL_NET any -> HOME_NET 8000 (msg:"someone is playing with tcp"; content:"POST"; nocase; http_method; detection_filter: track by_src, count 5, seconds 20; sid:1000003;)
+# alert icmp any any -> any any (msg:"Pinging..."; sid:1000001;)
+# alert tcp any any <> any 22 (msg:"ssh"; sid:1000002;)
+# alert tcp any any -> any 8000 (msg:"tcp"; sid:1000003;)
+alert tcp EXTERNAL_NET any -> HOME_NET 8000 (msg:"someone is playing with tcp"; content:"POST"; nocase; http_method; detection_filter: track by_src, count 10, seconds 1; sid:1000003;)
