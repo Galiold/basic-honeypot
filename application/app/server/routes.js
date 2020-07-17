@@ -2,6 +2,8 @@
 var CT = require('./modules/country-list');
 var AM = require('./modules/account-manager');
 var EM = require('./modules/email-dispatcher');
+const randomstring = require("randomstring")
+const fs = require('fs')
 
 
 const moment = require('moment');
@@ -220,6 +222,31 @@ module.exports = function(app) {
 		AM.countLocations()
 		.then(result => res.status(200).send(result))
 		.catch(err => res.status(500).send(err))
+	})
+
+
+	app.get('/dnscheck', (req, res) => {
+		if (req.query.hasOwnProperty('sub')) {
+			res.status(200).send('Checking DNS')
+		} else {
+			let random = randomstring.generate(10)
+			fs.appendFile('subdomains.txt', `${random}\n`, (err) => {
+				if (err) console.log(err)
+				else console.log(random)
+			})
+			res.status(200).send(
+				`<html>
+				<body>
+					<img src="${random}.galiold.ir/img.png" onerror="replaceLoc()">
+					<script>
+						function replaceLoc() {
+							{ location.replace("http://localhost:8000/dnsCheck?sub=${random}") }
+						}
+					</script>
+				</body>
+				</html>`
+			)
+		}
 	})
 
 	/////////////////////////

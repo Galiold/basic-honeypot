@@ -5,3 +5,4 @@ mongodata
 venv
 .vscode
 test.js
+subdomains.txt
