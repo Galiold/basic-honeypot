@@ -3,10 +3,13 @@ const crypto 		= require('crypto');
 const moment 		= require('moment');
 const geoip 		= require('geoip-lite');
 const MongoClient 	= require('mongodb').MongoClient;
+const mysql = require('mysql');
+const { ObjectID } = require('mongodb');
 
 
 
-let db, accounts, attempts;
+
+let db, accounts, attempts, suspiciousAttempts;
 
 MongoClient.connect(process.env.DB_URL, { useNewUrlParser: true, useUnifiedTopology: true }, function(e, client) {
 	if (e){
@@ -15,6 +18,7 @@ MongoClient.connect(process.env.DB_URL, { useNewUrlParser: true, useUnifiedTopol
 		db = client.db(process.env.DB_NAME);
 		accounts = db.collection('accounts');
 		attempts = db.collection('attempts');
+		suspiciousAttempts = db.collection('suspiciousAttempts')
 	// index fields 'user' & 'email' for faster new account validation //
 		accounts.createIndex({user: 1, email: 1});
 		console.log('mongo :: connected to database :: "'+process.env.DB_NAME+'"');
@@ -216,7 +220,7 @@ var listIndexes = function()
 }
 
 
-let save_attempt = (req, attempt_result) => {
+let saveAttempt = (req, attempt_result) => {
 	let ip = req.ip.split(':')
 		
 	ip = ip[ip.length - 1]
@@ -234,7 +238,47 @@ let save_attempt = (req, attempt_result) => {
 		'attempt-result': attempt_result? 'successful' : 'failed'
 	}
 
-	attempts.insertOne(attemptData, () => {});
+	attempts.insertOne(attemptData, (err, insertedAttempt) => {
+		if (!err) {
+			checkForSQLI(req, ObjectID(insertedAttempt.insertedId))
+		}
+	});
 } 
 
-exports.saveAttempt = save_attempt
+exports.saveAttempt = saveAttempt
+
+
+let checkForSQLI = (req, attemptID) => {
+	console.log(req.body)
+	if (isSQLSuscpicious(req.body['user']) || isSQLSuscpicious(req.body['pass'])) {
+		let suspiciousAttempt = {
+			attemptID: attemptID,
+			rawIP: req.ip,
+			payload: req.body
+		}
+		suspiciousAttempts.insertOne(suspiciousAttempt, {})
+	}
+}
+
+
+let isSQLSuscpicious = inputString => {
+	console.log(inputString);
+    if (`'${inputString}'` !== mysql.escapeId(inputString)) {
+        console.log('Input marked for SQLI checking');
+        let inputLower = inputString.toLowerCase()
+        if (inputLower.includes('select') ||
+            inputLower.includes('drop') ||
+            inputLower.includes('insert') ||
+            inputLower.includes('union') ||
+            inputLower.includes('union') ||
+            inputLower.includes('union') ||
+            inputLower.includes('and') ||
+            inputLower.includes('or')) {
+                return true
+			}
+		return false
+	}
+	return false
+}
+
+// exports.checkForSQLI = checkForSQLI
