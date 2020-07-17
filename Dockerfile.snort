@@ -6,4 +6,4 @@ RUN ln -s /usr/lib64/libdnet.so.1.0.1 /usr/lib64/libdnet.1
 COPY snort/ /etc/snort/
 # Define the network interface based on the connection, heres 'eth0' is used cuz the server has direct connection
 # in case of wireless connection wps2l0 may be used
-CMD [ "snort", "-A", "console", "-i", "eth0", "-c", "/etc/snort/snort.conf" ]
+# CMD [ "snort", "-A", "console", "-i", "eth0", "-c", "/etc/snort/snort.conf" ]
