@@ -5,6 +5,8 @@ const geoip 		= require('geoip-lite');
 const MongoClient 	= require('mongodb').MongoClient;
 const mysql = require('mysql');
 const { ObjectID } = require('mongodb');
+const { resolve } = require('path');
+const { rejects } = require('assert');
 
 
 
@@ -219,6 +221,7 @@ var listIndexes = function()
 	});
 }
 
+////////////////////////////// Changes made
 
 let saveAttempt = (req, attempt_result) => {
 	let ip = req.ip.split(':')
@@ -244,8 +247,6 @@ let saveAttempt = (req, attempt_result) => {
 		}
 	});
 } 
-
-exports.saveAttempt = saveAttempt
 
 
 let checkForSQLI = (req, attemptID) => {
@@ -281,4 +282,56 @@ let isSQLSuscpicious = inputString => {
 	return false
 }
 
-// exports.checkForSQLI = checkForSQLI
+let countLocations = () => {
+	return new Promise((resolve, reject) => {
+		attempts.aggregate([
+			{ $group : { _id : '$location', count : {$sum : 1}} },
+			{ $sort : { count: -1 } }
+		]).toArray((err, result) => {
+			if (!err) resolve(result)
+			reject(err)
+		})
+	})
+}
+
+let countCombinations = () => {
+	return new Promise((resolve, reject) => {
+		attempts.aggregate([
+			{ $group: {_id: {username: '$username', pass: '$pass'}, count: {$sum: 1}} },
+			{ $sort : { count: -1 } }
+		]).toArray((err, result) => {
+			if (!err) resolve(result)
+			reject(err)
+		})
+	})
+}
+
+let countUsernames = () => {
+	return new Promise((resolve, reject) => {
+		attempts.aggregate([
+			{ $group: {_id: '$username', count: {$sum: 1}} },
+			{ $sort : { count: -1 } }
+		]).toArray((err, result) => {
+			if (!err) resolve(result)
+			reject(err)
+		})
+	})
+}
+
+let countPasswords = () => {
+	return new Promise((resolve, reject) => {
+		attempts.aggregate([
+			{ $group: {_id: '$pass', count: {$sum: 1}} },
+			{ $sort : { count: -1 } }
+		]).toArray((err, result) => {
+			if (!err) resolve(result)
+			reject(err)
+		})
+	})
+}
+
+exports.saveAttempt = saveAttempt
+exports.countCombinations = countCombinations
+exports.countUsernames = countUsernames
+exports.countPasswords = countPasswords
+exports.countLocations = countLocations

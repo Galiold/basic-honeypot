@@ -195,7 +195,36 @@ module.exports = function(app) {
 			res.redirect('/print');
 		});
 	});
+
+	///////////////////////// Changes made
+
+	app.get('/topusernames', (req, res) => {
+		AM.countUsernames()
+		.then(result => res.status(200).send(result))
+		.catch(err => res.status(500).send(err))
+	})
+
+	app.get('/toppasswords', (req, res) => {
+		AM.countPasswords()
+		.then(result => res.status(200).send(result))
+		.catch(err => res.status(500).send(err))
+	})
+
+	app.get('/topcombinations', (req, res) => {
+		AM.countCombinations()
+		.then(result => res.status(200).send(result))
+		.catch(err => res.status(500).send(err))
+	})
+	
+	app.get('/toplocations', (req, res) => {
+		AM.countLocations()
+		.then(result => res.status(200).send(result))
+		.catch(err => res.status(500).send(err))
+	})
+
+	/////////////////////////
 	
 	app.get('*', function(req, res) { res.render('404', { title: 'Page Not Found'}); });
-
 };
+
+
