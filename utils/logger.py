@@ -1,19 +1,9 @@
 from texttable import Texttable
 from requests import request
-import json
-import os
 import threading
 import datetime
-
-# response = request("GET", url)
-# response = json.loads(response.text)
-
-# t = Texttable()
-
-# t.add_row(['Location', 'Count'])
-# toplocations = [ [item['_id'], item['count']] for item in response]
-# t.add_rows(toplocations, False)
-# print(t.draw())
+import json
+import os
 
 usernames = "http://localhost:8000/topusernames"
 passwords = "http://localhost:8000/toppasswords"
