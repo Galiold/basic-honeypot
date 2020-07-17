@@ -23,6 +23,7 @@
     "geoip-lite": "^1.4.2",
     "moment": "^2.22.2",
     "mongodb": "^3.5.9",
+    "mysql": "^2.18.1",
     "pug": "^2.0.3",
     "randomstring": "^1.1.5",
     "stylus": "^0.54.5"
