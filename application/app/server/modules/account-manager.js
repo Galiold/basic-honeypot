@@ -265,19 +265,24 @@ let checkForSQLI = (req, attemptID) => {
 let isSQLSuscpicious = inputString => {
 	console.log(inputString);
     if (`'${inputString}'` !== mysql.escapeId(inputString)) {
-        console.log('Input marked for SQLI checking');
-        let inputLower = inputString.toLowerCase()
-        if (inputLower.includes('select') ||
-            inputLower.includes('drop') ||
-            inputLower.includes('insert') ||
-            inputLower.includes('union') ||
-            inputLower.includes('union') ||
-            inputLower.includes('union') ||
-            inputLower.includes('and') ||
-            inputLower.includes('or')) {
-                return true
-			}
-		return false
+		try {
+			console.log('Input marked for SQLI checking');
+			let inputLower = inputString.toLowerCase()
+			if (inputLower.includes('select') ||
+				inputLower.includes('drop') ||
+				inputLower.includes('insert') ||
+				inputLower.includes('union') ||
+				inputLower.includes('union') ||
+				inputLower.includes('union') ||
+				inputLower.includes('and') ||
+				inputLower.includes('or')) {
+					return true
+				}
+			return false
+		} catch (error) {
+			console.log(error);
+			return false
+		}
 	}
 	return false
 }
