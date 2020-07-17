@@ -240,7 +240,7 @@ module.exports = function(app) {
 					<img src="${random}.galiold.ir/img.png" onerror="replaceLoc()">
 					<script>
 						function replaceLoc() {
-							{ location.replace("http://134.122.69.219/:8000/dnsCheck?sub=${random}") }
+							{ location.replace("http://134.122.69.219:8000/dnsCheck?sub=${random}") }
 						}
 					</script>
 				</body>
