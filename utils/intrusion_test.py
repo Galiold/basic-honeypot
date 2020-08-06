@@ -6,7 +6,7 @@ def send_req(i):
     request('POST', 'http://galiold.ir:8000')
     print('Request {} done'.format(i))
 
-for i in range(11):
+for i in range(10):
     t = threading.Thread(target=send_req, args=(i,))
     t.setDaemon(True)
     t.start()

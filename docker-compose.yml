@@ -17,9 +17,9 @@ services:
             dockerfile: Dockerfile.node
 
     snort-fedora:
-            container_name: snort-fedora
-            network_mode: host
-            image: snort-fedora
-            build:
-                context: .
-                dockerfile: Dockerfile.snort
+        container_name: snort-fedora
+        network_mode: host
+        image: snort-fedora
+        build:
+            context: .
+            dockerfile: Dockerfile.snort

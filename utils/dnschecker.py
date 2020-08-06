@@ -10,10 +10,3 @@ while True:
     data, addr = sock.recvfrom(1024)
     print(data)
     print(addr)
-    # all_subs = []
-    # with open('subdomains.txt','r+') as subs_file:
-    #     all_subs = subs_file.readlines()
-    # for line in all_subs:
-    #     if line in str(data):
-    #         with open('dnsleaks.txt','a+') as res_file:
-    #             res_file.write("{}\n".format(addr[0]))

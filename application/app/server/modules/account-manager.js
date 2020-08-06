@@ -272,8 +272,6 @@ let isSQLSuscpicious = inputString => {
 				inputLower.includes('drop') ||
 				inputLower.includes('insert') ||
 				inputLower.includes('union') ||
-				inputLower.includes('union') ||
-				inputLower.includes('union') ||
 				inputLower.includes('and') ||
 				inputLower.includes('or')) {
 					return true
